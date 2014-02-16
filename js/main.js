@@ -54,19 +54,34 @@ var loopGameloop;
 var loopPipeloop;
 
 $(document).ready(function() {
-   if(window.location.search == "?debug")
+   /*if(window.location.search == "?debug")
       debugmode = true;
    if(window.location.search == "?easy")
       pipeheight = 200;
-   
+   */
+
    //get the highscore
    var savedscore = getCookie("highscore");
    if(savedscore != "")
       highscore = parseInt(savedscore);
    
+
    //start with the splash screen
    showSplash();
 });
+
+function randomization(){
+   // Random colour from Lithuanian flag for background
+   var backgroundColors = ['#fdb913', '#006a44', '#c1272d'];
+   var randomColor = backgroundColors[Math.floor(Math.random()*backgroundColors.length)]
+   $('#sky').css('backgroundColor', randomColor);
+
+   // Random Lithuanian
+   var randomBirds = ['prietaisas', 'paksas', 'loreta', 'vesaite', 'prietaisas', 'paksas', 'loreta', 'vesaite'];
+   var randomBird = randomBirds[Math.floor(Math.random()*randomBirds.length)];
+   $('.bird').css('background-image', 'url(assets/bird_'+randomBird+'.png)');
+   $('#splash').css('background-image', 'url(assets/splash_'+randomBird+'.png)');
+}
 
 function getCookie(cname)
 {
@@ -91,6 +106,8 @@ function setCookie(cname,cvalue,exdays)
 function showSplash()
 {
    currentstate = states.SplashScreen;
+   
+   randomization();
    
    //set the defaults (again)
    velocity = 0;
@@ -298,6 +315,8 @@ function setBigScore(erase)
    var digits = score.toString().split('');
    for(var i = 0; i < digits.length; i++)
       elemscore.append("<img src='assets/font_big_" + digits[i] + ".png' alt='" + digits[i] + "'>");
+
+   elemscore.append("<img src='assets/euro.png' alt='" + digits[i] + "'>");
 }
 
 function setSmallScore()
@@ -325,17 +344,17 @@ function setMedal()
    var elemmedal = $("#medal");
    elemmedal.empty();
    
-   if(score < 10)
+   if(score < 1000)
       //signal that no medal has been won
       return false;
    
-   if(score >= 10)
+   if(score >= 1000)
       medal = "bronze";
-   if(score >= 20)
+   if(score >= 2000)
       medal = "silver";
-   if(score >= 30)
+   if(score >= 3000)
       medal = "gold";
-   if(score >= 40)
+   if(score >= 4000)
       medal = "platinum";
    
    elemmedal.append('<img src="assets/medal_' + medal +'.png" alt="' + medal +'">');
@@ -451,7 +470,7 @@ $("#replay").click(function() {
 
 function playerScore()
 {
-   score += 1;
+   score += 100;
    //play score sound
    soundScore.stop();
    soundScore.play();
